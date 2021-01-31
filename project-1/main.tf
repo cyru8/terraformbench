@@ -167,7 +167,16 @@ resource "aws_instance" "project-1" {
   }
 }
 
-output "public_ip" {
-    value = aws_instance.project-1.public_ip
+output "server_public_ip" {
+    value = aws_eip.eip-one.public_ip
     description = "The publicIP address of the Web Server"  
+}
+
+output "server_private_ip" {
+    value = aws_instance.project-1.private_ip
+    #value = aws_instance.project-1.id
+}
+
+output "server_id" {
+    value = aws_instance.project-1.id
 }
