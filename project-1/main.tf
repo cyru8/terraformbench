@@ -135,7 +135,7 @@ ingress {
     #cidr_blocks = [aws_vpc.main.cidr_block]
   }
 
-  egress {
+egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
