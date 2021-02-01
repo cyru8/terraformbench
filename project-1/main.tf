@@ -15,8 +15,8 @@ tags = {
 resource "aws_vpc" "vpc002" {
     cidr_block = "10.1.0.0/16"
 
-tags = {
-    Name = "dev-vpc"
+    tags = {
+        Name = "dev-vpc"
     }
 }
 
@@ -47,14 +47,13 @@ resource "aws_route_table" "prod-route-table" {
   }
 }
 
+# 4a. Create Prod subnet
 variable "subnet_prefix-prod" {
     description = "cidr block for production subnet"
-    #default = 
-    #type = any
-  
+    type = string
+    #default = "10.0.1.0/24"
 }
 
-# 4. Create a subnet
 resource "aws_subnet" "subnet-001vpc" {
   vpc_id     = aws_vpc.vpc001.id
   cidr_block = var.subnet_prefix-prod
@@ -65,15 +64,22 @@ resource "aws_subnet" "subnet-001vpc" {
   }
 }
 
-# resource "aws_subnet" "subnet-002vpc" {
-#   vpc_id     = aws_vpc.vpc002.id
-#   cidr_block = "10.1.1.0/24"
-#   availability_zone = "us-east-2a"
+# 4b. Create Dev subnet
+variable "subnet_prefix-dev" {
+    description = "cidr block for production subnet"
+    type = string
+    #default = "10.1.1.0/24"
+}
 
-#   tags = {
-#     Name = "dev-lansubnet-001"
-#   }
-# }
+resource "aws_subnet" "subnet-002vpc" {
+  vpc_id     = aws_vpc.vpc002.id
+  cidr_block = var.subnet_prefix-dev
+  availability_zone = "us-east-2a"
+
+  tags = {
+    Name = "dev-lansubnet-001"
+  }
+}
 
 # 5. Associate subnet with Route Table
 resource "aws_route_table_association" "prod-route-table-associ" {
