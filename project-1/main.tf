@@ -194,7 +194,7 @@ resource "aws_instance" "project-1" {
 
 output "server_public_ip" {
     value = aws_eip.eip-one.public_ip
-    description = "The publicIP address of the Web Server"  
+    description = "The public IP address of the Web Server"  
 }
 
 output "server_private_ip" {
