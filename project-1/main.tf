@@ -97,6 +97,10 @@ resource "aws_security_group" "allow_web" {
   description = "Allow web inbound traffic"
   vpc_id      = aws_vpc.vpc001.id
 
+#   variable "https_server_port" {
+#     description = "Web Server HTTPS Port"
+#     type = string
+# }
   ingress {
     description = "HTTPS"
     from_port   = 443
@@ -106,6 +110,10 @@ resource "aws_security_group" "allow_web" {
     #cidr_blocks = [aws_vpc.main.cidr_block]
   }
 
+# variable "http_server_port" {
+#     description = "Web Server HTTP Port"
+#     type = string
+# }
 ingress {
     description = "HTTP"
     from_port   = 80
@@ -114,7 +122,10 @@ ingress {
     cidr_blocks = ["0.0.0.0/0"]
     #cidr_blocks = [aws_vpc.main.cidr_block]
   }
-
+# variable "ssh_server_port" {
+#     description = "Server SSH Port"
+#     type = string
+# }
 ingress {
     description = "SSH"
     from_port   = 22
@@ -173,7 +184,7 @@ resource "aws_instance" "project-1" {
             sudo apt update -y
             sudo apt install apache2 -y
             sudo systemctl start apache2
-            sudo bash -c "echo Your very first Terraform Powered Web Server - Brewed by Cyru8 > /var/www/html/index.html"
+            sudo bash -c echo "Your very first Terraform Powered Web Server." - Brewed by Cyru8 > /var/www/html/index.html
             EOF
 
   tags = {
