@@ -5,19 +5,19 @@ provider "aws" {
 
 # 1. Create vpc
 resource "aws_vpc" "vpc001" {
-    cidr_block = "10.0.0.0/16"
+  cidr_block = "10.0.0.0/16"
 
-tags = {
+  tags = {
     Name = "prod-vpc"
-    }
+  }
 }
 
 resource "aws_vpc" "vpc002" {
-    cidr_block = "10.1.0.0/16"
+  cidr_block = "10.1.0.0/16"
 
-    tags = {
-        Name = "dev-vpc"
-    }
+  tags = {
+    Name = "dev-vpc"
+  }
 }
 
 # 2. Create Internet Gateway
@@ -38,8 +38,8 @@ resource "aws_route_table" "prod-route-table" {
   }
 
   route {
-    ipv6_cidr_block        = "::/0"
-    gateway_id = aws_internet_gateway.gway.id
+    ipv6_cidr_block = "::/0"
+    gateway_id      = aws_internet_gateway.gway.id
   }
 
   tags = {
@@ -49,14 +49,14 @@ resource "aws_route_table" "prod-route-table" {
 
 # 4a. Create Prod subnet
 variable "subnet_prefix-prod" {
-    description = "cidr block for production subnet"
-    type = string
-    #default = "10.0.1.0/24"
+  description = "cidr block for production subnet"
+  type        = string
+  #default = "10.0.1.0/24"
 }
 
 resource "aws_subnet" "subnet-001vpc" {
-  vpc_id     = aws_vpc.vpc001.id
-  cidr_block = var.subnet_prefix-prod
+  vpc_id            = aws_vpc.vpc001.id
+  cidr_block        = var.subnet_prefix-prod
   availability_zone = "us-east-2a"
 
   tags = {
@@ -66,14 +66,14 @@ resource "aws_subnet" "subnet-001vpc" {
 
 # 4b. Create Dev subnet
 variable "subnet_prefix-dev" {
-    description = "cidr block for production subnet"
-    type = string
-    #default = "10.1.1.0/24"
+  description = "cidr block for production subnet"
+  type        = string
+  #default = "10.1.1.0/24"
 }
 
 resource "aws_subnet" "subnet-002vpc" {
-  vpc_id     = aws_vpc.vpc002.id
-  cidr_block = var.subnet_prefix-dev
+  vpc_id            = aws_vpc.vpc002.id
+  cidr_block        = var.subnet_prefix-dev
   availability_zone = "us-east-2a"
 
   tags = {
@@ -97,10 +97,10 @@ resource "aws_security_group" "allow_web" {
   description = "Allow web inbound traffic"
   vpc_id      = aws_vpc.vpc001.id
 
-#   variable "https_server_port" {
-#     description = "Web Server HTTPS Port"
-#     type = string
-# }
+  #   variable "https_server_port" {
+  #     description = "Web Server HTTPS Port"
+  #     type = string
+  # }
   ingress {
     description = "HTTPS"
     from_port   = 443
@@ -110,11 +110,11 @@ resource "aws_security_group" "allow_web" {
     #cidr_blocks = [aws_vpc.main.cidr_block]
   }
 
-# variable "http_server_port" {
-#     description = "Web Server HTTP Port"
-#     type = string
-# }
-ingress {
+  # variable "http_server_port" {
+  #     description = "Web Server HTTP Port"
+  #     type = string
+  # }
+  ingress {
     description = "HTTP"
     from_port   = 80
     to_port     = 80
@@ -122,11 +122,11 @@ ingress {
     cidr_blocks = ["0.0.0.0/0"]
     #cidr_blocks = [aws_vpc.main.cidr_block]
   }
-# variable "ssh_server_port" {
-#     description = "Server SSH Port"
-#     type = string
-# }
-ingress {
+  # variable "ssh_server_port" {
+  #     description = "Server SSH Port"
+  #     type = string
+  # }
+  ingress {
     description = "SSH"
     from_port   = 22
     to_port     = 22
@@ -135,7 +135,7 @@ ingress {
     #cidr_blocks = [aws_vpc.main.cidr_block]
   }
 
-egress {
+  egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
@@ -153,10 +153,10 @@ resource "aws_network_interface" "web-server-nic" {
   private_ips     = ["10.0.1.50"]
   security_groups = [aws_security_group.allow_web.id]
 
-#   attachment {
-#     instance     = aws_instance.project-1.id
-#     device_index = 1
-#   }
+  #   attachment {
+  #     instance     = aws_instance.project-1.id
+  #     device_index = 1
+  #   }
 }
 
 # 8. Assign an elastic IP to the newtwork interface created in step 7
@@ -164,18 +164,18 @@ resource "aws_eip" "eip-one" {
   vpc                       = true
   network_interface         = aws_network_interface.web-server-nic.id
   associate_with_private_ip = "10.0.1.50"
-  depends_on = [aws_internet_gateway.gway]
+  depends_on                = [aws_internet_gateway.gway]
 }
 # 9. Create Ubuntu server and install/enable apache2
 
 resource "aws_instance" "project-1" {
-  ami          = "ami-0c55b159cbfafe1f0"
-  instance_type = "t2.micro"
+  ami               = "ami-0c55b159cbfafe1f0"
+  instance_type     = "t2.micro"
   availability_zone = "us-east-2a"
-  key_name = "main-key"
+  key_name          = "main-key"
 
   network_interface {
-    device_index = 0
+    device_index         = 0
     network_interface_id = aws_network_interface.web-server-nic.id
   }
 
@@ -193,15 +193,15 @@ resource "aws_instance" "project-1" {
 }
 
 output "server_public_ip" {
-    value = aws_eip.eip-one.public_ip
-    description = "The public IP address of the Web Server"  
+  value       = aws_eip.eip-one.public_ip
+  description = "The public IP address of the Web Server"
 }
 
 output "server_private_ip" {
-    value = aws_instance.project-1.private_ip
-    #value = aws_instance.project-1.id
+  value = aws_instance.project-1.private_ip
+  #value = aws_instance.project-1.id
 }
 
 output "server_id" {
-    value = aws_instance.project-1.id
+  value = aws_instance.project-1.id
 }
