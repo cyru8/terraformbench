@@ -9,16 +9,24 @@ terraform {
 
 provider "aws" {
   profile = "default"
-  region  = "us-east-2"
+  region  = var.region
 }
 
 resource "aws_instance" "test-instance01" {
-  ami           = "ami-0f052119b3c7e61d1"
+  ami = var.ami
   instance_type = "t2.micro"
 
   tags = {
-    Name = "test-instance01"
+    Name = var.instanceName
   }
 
 }
 
+resource "aws_eip" "eip01-ip" {
+  vpc      = true
+  instance = aws_instance.test-instance01.id
+}
+
+output "ip" {
+    value = aws_eip.eip01-ip.public_ip
+}
