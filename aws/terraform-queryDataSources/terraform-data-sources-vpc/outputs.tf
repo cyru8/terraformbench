@@ -17,3 +17,8 @@ output "private_subnet_ids" {
   description = "Private subnet IDs"
   value       = module.vpc.private_subnets
 }
+
+output "aws_region" {
+  description = "AWS Region"
+  value       = data.aws_region.current.name
+}
