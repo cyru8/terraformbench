@@ -1,0 +1,9 @@
+With this implemntation you a VM can be converted into a VM template without the need of running 2 post processors - 
+it can be done by a single configuration option convert_to_template.
+
+But on the other hand your vSphere installation must be quite up-to-date with at least version 6.5. Builds on lower 
+vesions may work, but due to some configuration options errors may come up because of the older vSphere API.
+
+In this example we are using again a dedicated host assignment because we are not using DRS on this test system. 
+If your are using DRS on your vSphere cluster you can replace the host parameter with resource_pool. The set of 
+vsphere connection parameters is well documented. in packer.io
