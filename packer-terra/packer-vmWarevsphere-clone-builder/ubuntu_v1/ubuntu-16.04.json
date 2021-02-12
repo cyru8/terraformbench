@@ -31,13 +31,15 @@
         "host": "esxi-1.vsphere65.test",
         "insecure_connection": true,
         "iso_paths": [
-          "[datastore1] ISO/ubuntu-16.04.3-server-amd64.iso"
+          "[datastore1] ISO/ubuntu-18.04.2-server-amd64.iso"
         ],
         "network_adapters": [
           {
             "network_card": "vmxnet3"
           }
         ],
+        "cluster": "ClusterName-1",
+        "folder": "DevFolder",
         "password": "jetbrains",
         "ssh_password": "jetbrains",
         "ssh_username": "jetbrains",

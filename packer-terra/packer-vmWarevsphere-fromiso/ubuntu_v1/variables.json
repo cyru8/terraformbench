@@ -1,0 +1,7 @@
+{
+    "esxi_host": "192.168.1.63",
+    "esxi_datastore": "datastore1",
+    "esxi_username": "root",
+    "esxi_password": "Front242"
+}
+  
