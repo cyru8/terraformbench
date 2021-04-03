@@ -20,7 +20,7 @@ resource "aws_autoscaling_group" "websrvcluster" {
 
     tag {
         key = "Name"
-        value = var.cluser_name
+        value = var.cluster_name
         propagate_at_lunch = true
     }  
 }
