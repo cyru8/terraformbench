@@ -19,7 +19,7 @@ provider "aws" {
 #---- 
 #Deploy Mysql on RDS
 #----
-resource "aws_db_instance" "webdb01" {
+resource "aws_db_instance" "prod" {
   identifier_prefix = "terraform-up-and-running"
   engine = "mysql"
   allocated_storage = 10
