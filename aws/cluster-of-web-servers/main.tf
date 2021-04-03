@@ -8,7 +8,7 @@ provider "aws" {
 
 # ---------------------------------------------------------------------------------------------------------------------
 # GET THE LIST OF AVAILABILITY ZONES IN THE CURRENT REGION
-# Every AWS accout has slightly different availability zones in each region. For example, one account might have
+# Every AWS accout has slightly different availability zones in each region. For web-server-cluster, one account might have
 # us-east-1a, us-east-1b, and us-east-1c, while another will have us-east-1a, us-east-1b, and us-east-1d. This resource
 # queries AWS to fetch the list for the current account and region.
 # ---------------------------------------------------------------------------------------------------------------------
@@ -17,11 +17,11 @@ data "aws_availability_zones" "all" {}
 # ----------------------------------------------------------------------------------
 # CREATE THE AUTO SCALING GROUP - ASG
 # ----------------------------------------------------------------------------------
-resource "aws_autoscaling_group" "example" {
-  launch_configuration = aws_launch_configuration.example.id  
+resource "aws_autoscaling_group" "web-server-cluster" {
+  launch_configuration = aws_launch_configuration.web-server-cluster.id  
   availability_zones   = data.aws_availability_zones.all.names 
   
-  load_balancers    = [aws_elb.example.name]
+  load_balancers    = [aws_elb.web-server-cluster.name]
   health_check_type = "ELB"
 
   min_size = 2
@@ -29,7 +29,7 @@ resource "aws_autoscaling_group" "example" {
   
   tag {
     key                 = "Name"
-    value               = "terraform-asg-example"
+    value               = "terraform-asg-web-server-cluster"
     propagate_at_launch = true
   }
 }
@@ -37,8 +37,8 @@ resource "aws_autoscaling_group" "example" {
 # ------------------------------------------------------------------------------------
 #CREATE THE CLASSIC LOADBALANCER CLB
 # ------------------------------------------------------------------------------------
-resource "aws_elb" "example" {
-  name               = "terraform-asg-example"
+resource "aws_elb" "web-server-cluster" {
+  name               = "terraform-asg-web-server-cluster"
   security_groups    = [aws_security_group.elb.id]
   availability_zones = data.aws_availability_zones.all.names  
   
@@ -79,7 +79,7 @@ variable "elb_port" {
 # CREATE THE SECURITY GROUP THAT'S APPLIED TO EACH EC2 INSTANCE IN THE ASG
 # -------------------------------------------------------------------------------------
 resource "aws_security_group" "instance" {
-  name = "terraform-example-instance"  
+  name = "terraform-web-server-cluster-instance"  
   ingress {
     from_port   = var.server_port
     to_port     = var.server_port
@@ -91,7 +91,7 @@ resource "aws_security_group" "instance" {
 # ------------------------------------------------------------------------------------
 # CREATE A LAUNCH CONFIGURATION THAT DEFINES EACH EC2 INSTANCE IN THE ASG
 # ------------------------------------------------------------------------------------
-resource "aws_launch_configuration" "example" {
+resource "aws_launch_configuration" "web-server-cluster" {
   image_id        = "ami-0c55b159cbfafe1f0"
   #ami           = "ami-0c55b159cbfafe1f0"
   instance_type = "t2.micro"

@@ -13,7 +13,7 @@
 # CREATE A SECURITY GROUP THAT CONTROLS WHAT TRAFFIC AN GO IN AND OUT OF THE ELB
 # ----------------------------------------------------------------------------------------------
 resource "aws_security_group" "elb" {
-  name = "terraform-example-elb"  
+  name = "terraform-web-server-cluster-elb"  
   # Allow all outbound
   egress {
     from_port   = 0
