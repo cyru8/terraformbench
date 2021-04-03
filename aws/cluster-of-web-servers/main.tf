@@ -100,7 +100,7 @@ resource "aws_launch_configuration" "web-server-cluster" {
 
   user_data = <<-EOF
               #!/bin/bash
-              echo "Hello, Clustered World!!! - Brewed By: Cyru8" > index.html
+              echo "Hello, Curious Cats!!! - Brewed By: Cyru8" > index.html
               nohup busybox httpd -f -p "${var.server_port}" &
               EOF
   
