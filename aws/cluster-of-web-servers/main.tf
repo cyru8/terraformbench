@@ -18,15 +18,15 @@ data "aws_availability_zones" "all" {}
 # CREATE THE AUTO SCALING GROUP - ASG
 # ----------------------------------------------------------------------------------
 resource "aws_autoscaling_group" "web-server-cluster" {
-  launch_configuration = aws_launch_configuration.web-server-cluster.id  
-  availability_zones   = data.aws_availability_zones.all.names 
-  
+  launch_configuration = aws_launch_configuration.web-server-cluster.id
+  availability_zones   = data.aws_availability_zones.all.names
+
   load_balancers    = [aws_elb.web-server-cluster.name]
   health_check_type = "ELB"
 
   min_size = 2
-  max_size = 10  
-  
+  max_size = 10
+
   tag {
     key                 = "Name"
     value               = "terraform-asg-web-server-cluster"
@@ -40,8 +40,8 @@ resource "aws_autoscaling_group" "web-server-cluster" {
 resource "aws_elb" "web-server-cluster" {
   name               = "terraform-asg-web-server-cluster"
   security_groups    = [aws_security_group.elb.id]
-  availability_zones = data.aws_availability_zones.all.names  
-  
+  availability_zones = data.aws_availability_zones.all.names
+
   health_check {
     target              = "HTTP:${var.server_port}/"
     interval            = 30
@@ -62,7 +62,7 @@ resource "aws_elb" "web-server-cluster" {
 # CREATE THE SECURITY GROUP THAT'S APPLIED TO EACH EC2 INSTANCE IN THE ASG
 # -------------------------------------------------------------------------------------
 resource "aws_security_group" "instance" {
-  name = "terraform-web-server-cluster-instance"  
+  name = "terraform-web-server-cluster-instance"
   ingress {
     from_port   = var.server_port
     to_port     = var.server_port
@@ -75,7 +75,7 @@ resource "aws_security_group" "instance" {
 # CREATE A LAUNCH CONFIGURATION THAT DEFINES EACH EC2 INSTANCE IN THE ASG
 # ------------------------------------------------------------------------------------
 resource "aws_launch_configuration" "web-server-cluster" {
-  image_id        = "ami-0c55b159cbfafe1f0"
+  image_id = "ami-0c55b159cbfafe1f0"
   #ami           = "ami-0c55b159cbfafe1f0"
   instance_type = "t2.micro"
   #vpc_security_group_ids = [aws_security_group.instance.id]
@@ -86,11 +86,11 @@ resource "aws_launch_configuration" "web-server-cluster" {
               echo "Hello, Curious Cats!!! - Brewed By: Cyru8" > index.html
               nohup busybox httpd -f -p "${var.server_port}" &
               EOF
-  
+
   lifecycle {
     create_before_destroy = true
   }
-  
+
 }
 # ---------------------------------------------------------------------------------------------------------------------
 # ENVIRONMENT VARIABLES
@@ -107,14 +107,14 @@ resource "aws_launch_configuration" "web-server-cluster" {
 # CREATE A SECURITY GROUP THAT CONTROLS WHAT TRAFFIC AN GO IN AND OUT OF THE ELB
 # ----------------------------------------------------------------------------------------------
 resource "aws_security_group" "elb" {
-  name = "terraform-web-server-cluster-elb"  
+  name = "terraform-web-server-cluster-elb"
   # Allow all outbound
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
-  }  
+  }
   # Inbound HTTP from anywhere
   ingress {
     from_port   = 80
