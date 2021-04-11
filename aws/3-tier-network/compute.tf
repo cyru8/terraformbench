@@ -11,7 +11,8 @@ resource "aws_instance" "jump_box" {
   key_name      = "sdn_dev_key"
 
   subnet_id              = aws_subnet.public_subnet.id
-  vpc_security_group_ids = [aws_security_group.general_sg.id, aws_security_group.bastion_sg.id]
+  # vpc_security_group_ids = [aws_security_group.general_sec_grp.id, aws_security_group.bastion_sg.id]
+  vpc_security_group_ids = [aws_security_group.out_ssh_bastion_sg.id, aws_security_group.out_http_app_sg.id]
 
   tags = {
     Project = "sdn-dev"
@@ -24,8 +25,8 @@ resource "aws_instance" "app_instance" {
   key_name      = "sdn_dev_key"
 
   subnet_id              = aws_subnet.private_subnet.id
-  vpc_security_group_ids = [aws_security_group.general_sg.id, aws_security_group.app_sg.id]
-
+  # vpc_security_group_ids = [aws_security_group.general_sec_grp.id, aws_security_group.app_sg.id]  
+  vpc_security_group_ids = [aws_security_group.out_ssh_bastion_sg.id, aws_security_group.out_http_app_sg.id]
   tags = {
     Project = "sdn-dev"
   }
