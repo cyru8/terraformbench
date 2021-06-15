@@ -13,7 +13,6 @@
 .terraform
 terraform.tfstate
 terraform.tfvars
-.terraform.lock.hcl
 *.tfstate*
 
 # OS X files

@@ -13,8 +13,12 @@
 .terraform
 terraform.tfstate
 terraform.tfvars
-.terraform.lock.hcl
 *.tfstate*
+.terraform.lock.hcl
+.terraform
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
 
 # OS X files
 .history
