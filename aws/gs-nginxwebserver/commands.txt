@@ -2,6 +2,7 @@
 # aws ec2 create-key-pair --key-name your_key_name
 terraform init
 terraform validate
+terraform fmt
 terraform plan -out gs-nginxwebserver-tfplan
 terraform apply "gs-nginxwebserver-tfplan"
 terraform destroy
