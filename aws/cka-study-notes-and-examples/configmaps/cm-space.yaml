@@ -1,9 +1,0 @@
-apiVersion: v1
-data:
-  system.conf: |
-    planet=blue
-    moon=white
-kind: ConfigMap
-metadata:
-  creationTimestamp: null
-  name: cm-space
